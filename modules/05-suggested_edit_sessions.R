@@ -75,9 +75,11 @@ if (!file.exists(file.path(data_dir, "suggested_edit_sessions2.csv.gz"))) {
   message("Compressing data")
   system(glue("gzip {data_dir}/suggested_edit_sessions2.csv"))
 } else {
+  message("Loading session lengths for Suggested Edits users")
   suggested_edit_sessions2 <- readr::read_csv(file.path(data_dir, "suggested_edit_sessions2.csv.gz"), col_types = "cciD")
 }
 
+message("Computing average session length")
 se_session_length <- suggested_edit_sessions2 %>%
   group_by(install_id) %>%
   summarize(avg_session_length = mean(session_length)) %>%

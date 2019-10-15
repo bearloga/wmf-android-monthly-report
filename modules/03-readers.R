@@ -20,9 +20,11 @@ if (!file.exists(file.path(data_dir, "reading_time.csv"))) {
   reading_time <- wmf::query_hive(glue(reading_query, .open = "${"))
   readr::write_csv(reading_time, file.path(data_dir, "reading_time.csv"))
 } else {
+  message("Loading reading stats")
   reading_time <- readr::read_csv(file.path(data_dir, "reading_time.csv"), col_types = "cd")
 }
 
+message("Counting monthly readers")
 monthly_query <- "USE bearloga;
 WITH reading_users AS (
   SELECT
@@ -41,6 +43,7 @@ readers_monthly <- wmf::query_hive(monthly_query) %>%
   mutate(summarized = sprintf("%.1f%% (%s out of %s)", 100 * prop, compress(true, 1), compress(true + false, 1))) %>%
   pull(summarized)
 
+message("Counting daily readers")
 daily_query <- "USE bearloga;
 WITH reading_users AS (
   SELECT

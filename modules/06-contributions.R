@@ -46,6 +46,7 @@ if (!file.exists(file.path(data_dir, "editor_data.csv"))) {
   rm(query_parameters, fetch_editor_stats) # quick cleanup
   readr::write_csv(editor_data, file.path(data_dir, "editor_data.csv"))
 } else {
+  message("Loading app microcontribution stats")
   editor_data <- readr::read_csv(file.path(data_dir, "editor_data.csv"), col_types = "ccDii")
 }
 

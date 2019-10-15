@@ -2,7 +2,7 @@
 # - explore_feed_daily
 
 if (!file.exists(file.path(data_dir, "explore_feed_monthly.csv"))) {
-  message("Fetching Explore Feed stats")
+  message("Fetching Explore Feed monthly stats")
   feed_monthly_query <- "SET mapreduce.map.memory.mb=4096;
     SELECT
       COUNT(DISTINCT event.app_install_id) AS n_users
@@ -15,10 +15,12 @@ if (!file.exists(file.path(data_dir, "explore_feed_monthly.csv"))) {
   explore_feed_monthly <- wmf::query_hive(glue(feed_monthly_query, .open = "${"))
   readr::write_csv(explore_feed_monthly, file.path(data_dir, "explore_feed_monthly.csv"))
 } else {
+  message("Loading Explore Feed monthly stats")
   explore_feed_monthly <- readr::read_csv(file.path(data_dir, "explore_feed_monthly.csv"), col_types = "i")
 }
 
 if (!file.exists(file.path(data_dir, "explore_feed_daily.csv"))) {
+  message("Fetching Explore Feed daily stats")
   feed_daily_query <- "WITH per_user_avgs AS (
       SELECT
         event.app_install_id,
@@ -48,5 +50,6 @@ if (!file.exists(file.path(data_dir, "explore_feed_daily.csv"))) {
   )
   readr::write_csv(explore_feed_daily, file.path(data_dir, "explore_feed_daily.csv"))
 } else {
+  message("Loading Explore Feed daily stats")
   explore_feed_daily <- readr::read_csv(file.path(data_dir, "explore_feed_daily.csv"), col_types = "idD")
 }

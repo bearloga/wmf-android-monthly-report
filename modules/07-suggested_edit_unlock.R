@@ -22,6 +22,7 @@ if (!file.exists(file.path(data_dir, "suggested_edit_unlock.csv"))) {
     keep_where(is.na(date) | date <= end_date)
   readr::write_csv(suggested_edit_unlock, file.path(data_dir, "suggested_edit_unlock.csv"))
 } else {
+  message("Loading Suggested Edits unlock stats")
   suggested_edit_unlock <- readr::read_csv(file.path(data_dir, "suggested_edit_unlock.csv"), col_types = "iTlD")
 }
 
