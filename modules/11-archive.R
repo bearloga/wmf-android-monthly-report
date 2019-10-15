@@ -1,0 +1,5 @@
+message("Archiving data to HDFS...")
+system(glue("tar -cf {data_dir}.tar {data_dir}"))
+system(glue("hdfs dfs -put {data_dir}.tar /user/bearloga/android_monthly_stats/"))
+system(glue("rm -rf {data_dir} {data_dir}.tar"))
+message("Done!")

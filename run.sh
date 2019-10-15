@@ -2,9 +2,9 @@
 cd /home/bearloga/android/metric_baselines/robin
 {
   date
-  echo "Getting data"
+  echo "Extracting a subset of session data"
   Rscript data.R
-  echo "Generating report"
-  /home/bearloga/venv/bin/jupyter nbconvert --ExecutePreprocessor.timeout=900 --execute --to notebook android-app-stats.ipynb
+  echo "Generating a report"
+  Rscript report.R
   cp output/*.html /srv/published-datasets/wikipedia-android-app-reports/metrics/
 } >> /home/bearloga/android/metric_baselines/robin/run.log 2>&1
