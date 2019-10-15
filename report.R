@@ -2,7 +2,7 @@ progress_savefile <- "progress.RData"
 
 run_module <- function(path) {
   message("Executing ", path)
-  source(run_module)
+  source(path)
   message("Saving progress to ", progress_savefile)
   save.image(progress_savefile, compress = TRUE)
 }
