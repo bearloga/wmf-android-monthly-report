@@ -56,6 +56,7 @@ clientside_contributions <- edit_session_summaries %>%
   mutate(total = article + `title description`)
 
 session_length_query <- "SET mapreduce.map.memory.mb=4096;
+USE event;
 WITH android_editors AS (
     SELECT DISTINCT event.app_install_id AS app_install_id
     FROM MobileWikiAppEdit
@@ -79,7 +80,7 @@ WITH android_editors AS (
 SELECT AVG(avg_session_length) AS avg_session_length
 FROM session_lengths
 WHERE avg_session_length IS NOT NULL;"
-contributors_session_length <- wmf::query_hive(session_length_query)$avg_session_length
+contributors_session_length <- wmf::query_hive(glue(session_length_query, .open = "${"))$avg_session_length %>%
   round %>%
   lubridate::seconds_to_period() %>%
   tolower
