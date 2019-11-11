@@ -1,3 +1,5 @@
+source("modules/00-setup.R")
+
 system("hive -f android_app_sessions_subset.hql")
 
 query <- "USE bearloga;
