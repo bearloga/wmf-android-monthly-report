@@ -1,5 +1,5 @@
 #!/bin/bash
-cd /home/bearloga/android/metric_baselines/robin
+cd /home/bearloga/android/metric_baselines/monthly_report
 {
   date
   echo "Extracting a subset of session data"
@@ -7,4 +7,4 @@ cd /home/bearloga/android/metric_baselines/robin
   echo "Generating a report"
   Rscript report.R
   cp output/*.html /srv/published-datasets/wikipedia-android-app-reports/metrics/
-} >> /home/bearloga/android/metric_baselines/robin/run.log 2>&1
+} >> run.log 2>&1
