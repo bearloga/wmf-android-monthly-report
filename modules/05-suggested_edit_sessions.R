@@ -55,9 +55,8 @@ if (!file.exists(file.path(data_dir, "suggested_edit_sessions2.csv.gz"))) {
       se_sessions.install_id = sessions.event.app_install_id
       AND se_sessions.session_id = sessions.event.session_token
       AND sessions.year = ${year} AND sessions.month = ${month} AND sessions.day = ${day}
-      AND sessions.revision = 18948969
     )
-    WHERE sessions.event.length >= 0"
+    WHERE sessions.event.length >= 0;"
   message("Fetching session lengths for Suggested Edits users")
   suggested_edit_sessions2 <- purrr::map_dfr(
     seq(start_date, end_date, by = "day"),
@@ -65,9 +64,15 @@ if (!file.exists(file.path(data_dir, "suggested_edit_sessions2.csv.gz"))) {
       message("Fetching data from ", date)
       c(year, month, day) %<-% wmf::extract_ymd(date)
       query <- glue(se_session_query2, .open = "${")
-      result <- wmf::query_hive(query)
-      result$date <- date
-      return(result)
+      try({
+        result <- wmf::query_hive(query)
+        result$date <- date
+        return(result)
+      })
+      return(data.frame(
+        install_id = character(), session_id = character(), session_length = numeric(),
+        stringsAsFactors = FALSE
+      ))
     }
   )
   message("Saving data")
