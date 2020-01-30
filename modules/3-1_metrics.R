@@ -62,7 +62,7 @@ metrics <- data.frame(
     NA,
     NA,
     sprintf(
-      "%s (%s title descriptions, %i image captions)",
+      "%s (%s title descriptions, %s image captions)",
       prettyNum(inapp_edits_monthly$`title description` + inapp_edits_monthly$`image caption`, big.mark = " "),
       prettyNum(inapp_edits_monthly$`title description`, big.mark = " "),
       prettyNum(inapp_edits_monthly$`image caption`, big.mark = " ")
