@@ -11,8 +11,9 @@ metric_labels <- c(
   "Average session time of ”Suggested edits” users",
   "Median time spent in “Suggested Edits”",
   "Total number of unique users that have unlocked at least one “Suggested edits” feature",
-  "Total number of article description edits in the app (add, translate, edit)",
-  "Total number of article description edits in the app via Suggested edits (add, translate)",
+  "Micro-contributions made in the app (add, translate, edit)",
+  "Micro-contributions made in the app via Suggested edits (add, translate)",
+  "Not-reverted image caption translations made via Suggested Edits",
   "Total number of unique users in Explore feed",
   "Average time spent in Explore feed"
 )
@@ -31,8 +32,19 @@ metrics <- data.frame(
     NA,
     NA,
     NA,
-    prettyNum(inapp_edits_daily, big.mark = " "),
-    prettyNum(suggested_edits_daily, big.mark = " "),
+    sprintf(
+      "%s (%s descriptions/day, %s captions/day)",
+      prettyNum(inapp_edits_daily$`both`, big.mark = " "),
+      prettyNum(inapp_edits_daily$`title description`, big.mark = " "),
+      prettyNum(inapp_edits_daily$`image caption`, big.mark = " ")
+    ),
+    sprintf(
+      "%s (%s/d descriptions/day, %s captions/day)",
+      prettyNum(suggested_edits_daily$`both`, big.mark = " "),
+      prettyNum(suggested_edits_daily$`title description`, big.mark = " "),
+      prettyNum(suggested_edits_daily$`image caption`, big.mark = " ")
+    ),
+    NA,
     prettyNum(ceiling(mean(explore_feed_daily$n_users)), big.mark = " "),
     NA
   ),
@@ -49,8 +61,24 @@ metrics <- data.frame(
     NA,
     NA,
     NA,
-    prettyNum(inapp_edits_monthly, big.mark = " "),
-    prettyNum(suggested_edits_monthly, big.mark = " "),
+    sprintf(
+      "%s (%s title descriptions, %i image captions)",
+      prettyNum(inapp_edits_monthly$`title description` + inapp_edits_monthly$`image caption`, big.mark = " "),
+      prettyNum(inapp_edits_monthly$`title description`, big.mark = " "),
+      prettyNum(inapp_edits_monthly$`image caption`, big.mark = " ")
+    ),
+    sprintf(
+      "%s (%s title descriptions, %s image captions)",
+      prettyNum(suggested_edits_monthly$`title description` + suggested_edits_monthly$`image caption`, big.mark = " "),
+      prettyNum(suggested_edits_monthly$`title description`, big.mark = " "),
+      prettyNum(suggested_edits_monthly$`image caption`, big.mark = " ")
+    ),
+    sprintf(
+      "%s cumulatively (%s just this month)",
+      prettyNum(image_caption_translations$n_cumulative_total, big.mark = " "),
+      prettyNum(image_caption_translations$n_new_this_month, big.mark = " ")
+    ),
+    image_caption_translations,
     prettyNum(explore_feed_monthly$n_users[1], big.mark = " "),
     NA
   ),
@@ -70,6 +98,7 @@ metrics <- data.frame(
     NA,
     NA,
     NA,
+    NA,
     tolower(lubridate::seconds_to_period(round(mean(explore_feed_daily$avg_time_spent))))
   ),
   source = c(
@@ -85,6 +114,7 @@ metrics <- data.frame(
     "in-app analytics",
     "in-app analytics",
     "Suggested Edits backend db",
+    "mediawiki content db",
     "mediawiki content db",
     "mediawiki content db",
     "in-app analytics",

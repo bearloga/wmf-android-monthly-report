@@ -64,27 +64,37 @@ suggested_editors_monthly <- editor_data %>%
   pull(n_users)
 
 suggested_edits_daily <- editor_data %>%
-  keep_where(edit_type == "title description") %>%
+  group_by(edit_type, date) %>%
+  summarize(suggested_edits = sum(suggested_edits)) %>%
+  summarize(avg_suggested_edits = mean(suggested_edits)) %>%
+  mutate(avg_suggested_edits = ceiling(avg_suggested_edits)) %>%
+  spread(edit_type, avg_suggested_edits)
+suggested_edits_daily$both <- editor_data %>%
   group_by(date) %>%
   summarize(suggested_edits = sum(suggested_edits)) %>%
   summarize(avg_suggested_edits = mean(suggested_edits)) %>%
-  pull(avg_suggested_edits) %>%
-  ceiling
+  mutate(avg_suggested_edits = ceiling(avg_suggested_edits)) %>%
+  pull(avg_suggested_edits)
 
 suggested_edits_monthly <- editor_data %>%
-  keep_where(edit_type == "title description") %>%
+  group_by(edit_type) %>%
   summarize(suggested_edits = sum(suggested_edits)) %>%
-  pull(suggested_edits)
+  spread(edit_type, suggested_edits)
 
 inapp_edits_daily <- editor_data %>%
-  keep_where(edit_type == "title description") %>%
+  group_by(edit_type, date) %>%
+  summarize(total_edits = sum(total_edits)) %>%
+  summarize(avg_total_edits = mean(total_edits)) %>%
+  mutate(avg_total_edits = ceiling(avg_total_edits)) %>%
+  spread(edit_type, avg_total_edits)
+inapp_edits_daily$both <- editor_data %>%
   group_by(date) %>%
   summarize(total_edits = sum(total_edits)) %>%
   summarize(avg_total_edits = mean(total_edits)) %>%
-  pull(avg_total_edits) %>%
-  ceiling
+  mutate(avg_total_edits = ceiling(avg_total_edits)) %>%
+  pull(avg_total_edits)
 
 inapp_edits_monthly <- editor_data %>%
-  keep_where(edit_type == "title description") %>%
+  group_by(edit_type) %>%
   summarize(total_edits = sum(total_edits)) %>%
-  pull(total_edits)
+  spread(edit_type, total_edits)

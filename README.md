@@ -33,8 +33,11 @@ If [Kerberos authentication via keytab](https://wikitech.wikimedia.org/wiki/Anal
 
 The modules (sub-scripts run by report.R) are as follows:
 
-- [00-setup.R](modules/00-setup.R) attaches libraries, determines all the dates to use in queries, and sets up the paths that data and output will be written to.
-- modules 01 through 08 are for calculating the various metrics that show up in the report card.
-- [09-metrics.R](modules/09-metrics.R) puts together the report card and writes it out as a web page in the [output](output/) directory.
-- [10-index.R](modules/10-index.R) generates a new index page of the monthly report cards, which also goes in the output/ directory.
-- [11-archive.R](modules/11-archive.R) compresses, archives, and moves the generated data files to Hadoop Distributed File System (HDFS) for long-term storage.
+- **Section 1: Initialize**
+  1. [setup.R](modules/1-1_setup.R) attaches libraries, determines all the dates to use in queries, and sets up the paths that data and output will be written to
+- **Section 2: Get Metrics**
+  - modules 2-1 through 2-9 are for calculating the various metrics that show up in the report card
+- **Section 3: Finalize**
+  1. [metrics.R](modules/3-1_metrics.R) puts together the report card and writes it out as a web page in the [output](output/) directory.
+  2. [index.R](modules/3-2_index.R) generates a new index page of the monthly report cards, which also goes in the output/ directory.
+  3. [archive.R](modules/3-3_archive.R) compresses, archives, and moves the generated data files to Hadoop Distributed File System (HDFS) for long-term storage.
