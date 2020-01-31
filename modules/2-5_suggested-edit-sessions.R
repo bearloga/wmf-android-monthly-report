@@ -4,23 +4,33 @@
 
 if (!file.exists(file.path(data_dir, "suggested_edit_sessions.csv"))) {
   se_session_query <- "USE event;
+    WITH unique_se_session_summaries AS (
+    -- This step is done as a precaution in case a bug causes events to be sent more than once
+      SELECT DISTINCT
+        event.app_install_id AS install_id,
+        event.session_token AS session_id,
+        event.edit_tasks,
+        event.time_spent
+      FROM MobileWikiAppSuggestedEdits
+      WHERE year = ${year} AND month = ${month}
+        AND INSTR(useragent.wmf_app_version, '-r-') > 0
+        AND event.time_spent >= 0
+    )
     SELECT
-      event.app_install_id AS install_id,
-      event.session_token AS session_id,
+      install_id,
+      session_id,
       -- Session summary:
-      SUM(event.time_spent) AS total_time_spent, -- in seconds
+      SUM(time_spent) AS total_time_spent, -- in seconds
       COALESCE(SUM(description_addition.successes) + SUM(description_translation.successes) + SUM(caption_addition.successes) + SUM(caption_translation.successes), 0L) AS n_edits
-    FROM MobileWikiAppSuggestedEdits
+    FROM unique_se_session_summaries
     LATERAL VIEW
-      JSON_TUPLE(event.edit_tasks, 'add-description', 'translate-description', 'add-caption', 'translate-caption') edit_tasks
+      JSON_TUPLE(edit_tasks, 'add-description', 'translate-description', 'add-caption', 'translate-caption') et
       AS add_desc, translate_desc, add_cap, translate_cap
-    LATERAL VIEW JSON_TUPLE(edit_tasks.add_desc, 'successes') description_addition AS successes
-    LATERAL VIEW JSON_TUPLE(edit_tasks.translate_desc, 'successes') description_translation AS successes
-    LATERAL VIEW JSON_TUPLE(edit_tasks.add_cap, 'successes') caption_addition AS successes
-    LATERAL VIEW JSON_TUPLE(edit_tasks.translate_cap, 'successes') caption_translation AS successes
-    WHERE year = ${year} AND month = ${month}
-      AND INSTR(useragent.wmf_app_version, '-r-') > 0
-    GROUP BY event.app_install_id, event.session_token;"
+    LATERAL VIEW JSON_TUPLE(et.add_desc, 'successes') description_addition AS successes
+    LATERAL VIEW JSON_TUPLE(et.translate_desc, 'successes') description_translation AS successes
+    LATERAL VIEW JSON_TUPLE(et.add_cap, 'successes') caption_addition AS successes
+    LATERAL VIEW JSON_TUPLE(et.translate_cap, 'successes') caption_translation AS successes
+    GROUP BY install_id, session_id;"
   message("Fetching Suggested Edits stats")
   suggested_edit_sessions <- wmf::query_hive(glue(se_session_query, .open = "${"))
   readr::write_csv(suggested_edit_sessions, file.path(data_dir, "suggested_edit_sessions.csv"))
