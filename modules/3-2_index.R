@@ -16,13 +16,15 @@ all_reports %>%
     format = "html",
     col.names = c("Month"),
     align = c("l"),
-    escape = FALSE
+    escape = FALSE,
+    caption = "Source/documentation <a href=\"https://github.com/bearloga/wmf-android-monthly-report\">here</a>"
   ) %>%
   kableExtra::kable_styling(
     bootstrap_options = c("striped", "hover"),
     full_width = FALSE,
     font_size = 14
   ) %>%
+  kableExtra::column_spec(1, width = "300px") %>%
   kableExtra::save_kable(
     file = file.path("output", "index.html"),
     self_contained = TRUE,

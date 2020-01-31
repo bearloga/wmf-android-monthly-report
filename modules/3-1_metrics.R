@@ -39,7 +39,7 @@ metrics <- data.frame(
       prettyNum(inapp_edits_daily$`image caption`, big.mark = " ")
     ),
     sprintf(
-      "%s (%s/d descriptions/day, %s captions/day)",
+      "%s (%s descriptions/day, %s captions/day)",
       prettyNum(suggested_edits_daily$`both`, big.mark = " "),
       prettyNum(suggested_edits_daily$`title description`, big.mark = " "),
       prettyNum(suggested_edits_daily$`image caption`, big.mark = " ")
@@ -78,7 +78,6 @@ metrics <- data.frame(
       prettyNum(image_caption_translations$n_cumulative_total, big.mark = " "),
       prettyNum(image_caption_translations$n_new_this_month, big.mark = " ")
     ),
-    image_caption_translations,
     prettyNum(explore_feed_monthly$n_users[1], big.mark = " "),
     NA
   ),

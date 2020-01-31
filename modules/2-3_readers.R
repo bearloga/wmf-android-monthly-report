@@ -15,6 +15,7 @@ if (!file.exists(file.path(data_dir, "reading_time.csv"))) {
       AND event.page_id > 0
       AND useragent.os_family = 'Android'
       AND INSTR(useragent.wmf_app_version, '-r-') > 0
+      AND event.time_spent >= 0
     GROUP BY event.app_install_id"
   message("Fetching reading stats")
   reading_time <- wmf::query_hive(glue(reading_query, .open = "${"))

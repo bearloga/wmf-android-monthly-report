@@ -2,7 +2,7 @@
 # - image_caption_translations
 
 if (!file.exists(file.path(data_dir, "image_caption_translations.csv"))) {
-  ict_query <- glue::glue("USE wmf;
+  ict_query <- glue("USE wmf;
 SELECT
   COUNT(1) AS n_cumulative_total,
   SUM(IF(event_timestamp >= '{yyyy_mm}-01', 1, 0)) AS n_new_this_month
