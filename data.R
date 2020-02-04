@@ -1,4 +1,4 @@
-source("modules/00-setup.R")
+source("modules/1-1_setup.R")
 
 system("hive -f android_app_sessions_subset.hql")
 
