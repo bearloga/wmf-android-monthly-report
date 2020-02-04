@@ -15,7 +15,8 @@ metric_labels <- c(
   "Micro-contributions made in the app via Suggested edits (add, translate)",
   "Not-reverted image caption translations made via Suggested Edits",
   "Total number of unique users in Explore feed",
-  "Average time spent in Explore feed"
+  "Average time spent in Explore feed",
+  "New accounts registered inside app"
 )
 
 metrics <- data.frame(
@@ -46,7 +47,8 @@ metrics <- data.frame(
     ),
     NA,
     prettyNum(ceiling(mean(explore_feed_daily$n_users)), big.mark = " "),
-    NA
+    NA,
+    prettyNum(ceiling(mean(accounts_created$n_new_accounts)), big.mark = " ")
   ),
   monthly_total = c(
     prettyNum(mau[1], big.mark = " "),
@@ -78,8 +80,9 @@ metrics <- data.frame(
       prettyNum(image_caption_translations$n_cumulative_total, big.mark = " "),
       prettyNum(image_caption_translations$n_new_this_month, big.mark = " ")
     ),
-    prettyNum(explore_feed_monthly$n_users[1], big.mark = " "),
-    NA
+    prettyNum(explore_feed_monthly$n_new_accounts[1], big.mark = " "),
+    NA,
+    prettyNum(sum(accounts_created$n_new_accounts), big.mark = " ")
   ),
   value = c(
     NA,
@@ -98,7 +101,8 @@ metrics <- data.frame(
     NA,
     NA,
     NA,
-    tolower(lubridate::seconds_to_period(round(mean(explore_feed_daily$avg_time_spent))))
+    tolower(lubridate::seconds_to_period(round(mean(explore_feed_daily$avg_time_spent)))),
+    NA
   ),
   source = c(
     "in-app analytics",
@@ -117,7 +121,8 @@ metrics <- data.frame(
     "mediawiki content db",
     "mediawiki content db",
     "in-app analytics",
-    "in-app analytics"
+    "in-app analytics",
+    "server-side account creation"
   ),
   stringsAsFactors = FALSE
 ) %>%
