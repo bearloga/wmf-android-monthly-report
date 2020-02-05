@@ -5,9 +5,9 @@ if (!file.exists(file.path(data_dir, "image_caption_translations.csv"))) {
   ict_query <- "USE wmf;
 SELECT
   COUNT(1) AS n_cumulative_total,
-  SUM(IF(event_timestamp >= '{yyyy_mm}-01', 1, 0)) AS n_new_this_month
+  SUM(IF(event_timestamp >= '${yyyy_mm}-01', 1, 0)) AS n_new_this_month
 FROM mediawiki_history
-WHERE snapshot = '{yyyy_mm}'
+WHERE snapshot = '${yyyy_mm}'
   AND wiki_db = 'commonswiki'
   AND event_entity = 'revision'
   AND ARRAY_CONTAINS(revision_tags, 'android app edit')

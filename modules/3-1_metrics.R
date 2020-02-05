@@ -1,3 +1,5 @@
+options(digits = 4, scipen = 999)
+
 metric_labels <- c(
   "Total number of unique users",
   "Average session time per user",
