@@ -80,7 +80,7 @@ metrics <- data.frame(
       prettyNum(image_caption_translations$n_cumulative_total, big.mark = " "),
       prettyNum(image_caption_translations$n_new_this_month, big.mark = " ")
     ),
-    prettyNum(explore_feed_monthly$n_new_accounts[1], big.mark = " "),
+    prettyNum(explore_feed_monthly$n_users[1], big.mark = " "),
     NA,
     prettyNum(sum(accounts_created$n_new_accounts), big.mark = " ")
   ),
