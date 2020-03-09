@@ -1,4 +1,4 @@
-source("modules/1-1_setup.R")
+source("modules/1_setup.R")
 
 system("hive -f android_app_sessions_subset.hql")
 
@@ -32,7 +32,7 @@ HAVING n_total_sessions > 0;
 
 SHOW PARTITIONS android_app_sessions_subset;"
 
-results <- purrr::map(
+results <- purrr::walk(
   seq(start_date, end_date, by = "day"),
   function(date) {
     message("Fetching data from ", date)
@@ -41,6 +41,3 @@ results <- purrr::map(
     result <- tail(wmf::query_hive(query))[, 1]
   }
 )
-
-message("Extracted session data for the following days of the month:")
-print(results)
