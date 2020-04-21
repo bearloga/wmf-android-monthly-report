@@ -2,11 +2,11 @@
 # - image_caption_translations
 
 if (!file.exists(file.path(data_dir, "image_caption_translations.csv"))) {
-  ict_query <- "USE wmf;
+  ict_query <- "SET mapreduce.map.memory.mb=4096;
 SELECT
   COUNT(1) AS n_cumulative_total,
   SUM(IF(event_timestamp >= '${yyyy_mm}-01', 1, 0)) AS n_new_this_month
-FROM mediawiki_history
+FROM wmf.mediawiki_history
 WHERE snapshot = '${yyyy_mm}'
   AND wiki_db = 'commonswiki'
   AND event_entity = 'revision'
